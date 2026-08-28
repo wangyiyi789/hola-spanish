@@ -1,0 +1,36 @@
+import { resolvePublicPath } from '../services/publicPath';
+
+const audio = (filename: string) => resolvePublicPath(`/audio/${filename}`);
+
+export const bundledAudioSources: Readonly<Record<string, string>> = {
+  'eñe': audio('ene.mp3'),
+  'niño, pan': audio('nino-pan.mp3'),
+  'mañana': audio('manana.mp3'),
+  'niño': audio('nino.mp3'),
+  'pan': audio('pan.mp3'),
+  'El niño come pan.': audio('el-nino-come-pan.mp3'),
+  'El nino come pan.': audio('el-nino-without-enye.mp3'),
+  'Pan el niño come.': audio('pan-el-nino-come.mp3'),
+  'La mujer bebe café.': audio('la-mujer-bebe-cafe.mp3'),
+  'La': audio('la.mp3'),
+  'mujer': audio('mujer.mp3'),
+  'bebe': audio('bebe.mp3'),
+  '¿Dónde está la estación?': audio('donde-esta-la-estacion.mp3'),
+  '¿Dónde...?': audio('donde.mp3'),
+  '¿Quién...?': audio('quien.mp3'),
+  '¿Cuándo...?': audio('cuando.mp3'),
+  '¿Quién es tu profesor?': audio('quien-es-tu-profesor.mp3'),
+  '¿Qué es tu profesor?': audio('que-es-tu-profesor.mp3'),
+  '¿Dónde es tu profesor?': audio('donde-es-tu-profesor.mp3'),
+  'Ayer estudié español.': audio('ayer-estudie-espanol.mp3'),
+  'Ayer estudio español.': audio('ayer-estudio-espanol.mp3'),
+  'Hoy estudié español.': audio('hoy-estudie-espanol.mp3'),
+  'Hoy estudio español. Ayer estudié español.': audio('hoy-estudio-ayer-estudie.mp3'),
+  'hoy → estudié / ayer → estudio': audio('hoy-estudie-ayer-estudio.mp3'),
+  'hoy → estudio / ayer → estudié': audio('hoy-estudio-ayer-estudie.mp3'),
+  'hoy → estudio / ayer → estudio': audio('hoy-estudio-ayer-estudio.mp3'),
+  'El niño sabe más de lo que dice.': audio('scene-nino-knows.mp3'),
+  'Mañana empezamos de nuevo.': audio('scene-manana-start-again.mp3'),
+  'Un café. Tenemos una noche muy larga.': audio('scene-cafe-long-night.mp3'),
+  '¿Dónde estabas cuando ocurrió todo?': audio('scene-donde-were-you.mp3'),
+};
