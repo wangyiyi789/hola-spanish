@@ -1,0 +1,7 @@
+.superpowers/
+.worktrees/
+node_modules/
+dist/
+artifacts/qa-in-progress/
+test-results/
+playwright-report/
