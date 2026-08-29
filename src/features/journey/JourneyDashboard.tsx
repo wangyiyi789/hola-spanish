@@ -24,7 +24,7 @@ export function JourneyDashboard({ progress, onGoalChange, onOpenLesson }: Journ
       <main className="dashboard-main">
         <header className="dashboard-heading">
           <div>
-            <p className="greeting"><Moon aria-hidden="true" fill="currentColor" size={18} /> 晚上好，小航</p>
+            <p className="greeting"><Moon aria-hidden="true" fill="currentColor" size={18} /> 晚上好，{progress.learnerName}</p>
             <h1 className="dashboard-title">今天，让我们认识 <em>Ñ</em>。</h1>
           </div>
           <div className="quick-stats" aria-label="学习概况">
@@ -47,3 +47,4 @@ export function JourneyDashboard({ progress, onGoalChange, onOpenLesson }: Journ
     </>
   );
 }
+

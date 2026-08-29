@@ -28,6 +28,23 @@ describe('App lesson routing', () => {
     expect(screen.queryByText('这一站正在准备')).not.toBeInTheDocument();
   });
 
+  it('lets a learner change their name and keeps the greeting after remounting', async () => {
+    const user = userEvent.setup();
+    const first = render(<App />);
+
+    expect(screen.getByText('晚上好，学习者')).toBeVisible();
+    await user.click(screen.getByRole('button', { name: '设置' }));
+    const input = screen.getByRole('textbox', { name: '学习者姓名' });
+    await user.clear(input);
+    await user.type(input, '伊莲娜');
+    await user.click(screen.getByRole('button', { name: '保存姓名' }));
+    expect(screen.getByRole('status')).toHaveTextContent('姓名已保存');
+
+    first.unmount();
+    render(<App />);
+    expect(screen.getByText('晚上好，伊莲娜')).toBeVisible();
+  });
+
   it('opens a dedicated professional drill from practice', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -89,3 +106,4 @@ describe('App lesson routing', () => {
     expect(screen.getByRole('heading', { name: '训练完成' })).toBeVisible();
   });
 });
+

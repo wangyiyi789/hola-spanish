@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import type { LessonId } from '../domain/course';
 import type { DailyGoalMinutes, Progress, RecoveryKind } from '../domain/progress';
 import { lessons } from '../data/curriculum';
-import { checkpointLesson, completeLesson, loadProgress, resetToInitialProgress, restoreBackup, saveProgress, setDailyGoal } from '../features/progress/progressStore';
+import { checkpointLesson, completeLesson, loadProgress, resetToInitialProgress, restoreBackup, saveProgress, setDailyGoal, setLearnerName } from '../features/progress/progressStore';
 import type { LessonCheckpointEvent } from '../features/lesson/LessonPlayer';
 import type { AppSection } from '../features/navigation/SideNav';
 
@@ -33,6 +33,10 @@ export function useAppState() {
 
   const changeGoal = useCallback((minutes: DailyGoalMinutes) => {
     setState((current) => ({ ...current, progress: persist(setDailyGoal(current.progress, minutes)) }));
+  }, [persist]);
+
+  const changeLearnerName = useCallback((name: string) => {
+    setState((current) => ({ ...current, progress: persist(setLearnerName(current.progress, name)) }));
   }, [persist]);
 
   const openLesson = useCallback((lessonId: LessonId) => {
@@ -75,5 +79,6 @@ export function useAppState() {
     if (restored) setState((current) => ({ ...current, progress: restored, view: 'journey', currentLessonId: null }));
   }, []);
 
-  return { ...state, changeGoal, openLesson, openDrill, checkpoint, finishLesson, navigate, dismissRecovery, importLearningProgress, resetLearningProgress, restoreLearningProgress };
+  return { ...state, changeGoal, changeLearnerName, openLesson, openDrill, checkpoint, finishLesson, navigate, dismissRecovery, importLearningProgress, resetLearningProgress, restoreLearningProgress };
 }
+

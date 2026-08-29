@@ -2355,6 +2355,84 @@ button:disabled {
   font-family: var(--font-display);
 }
 
+.learner-profile-card {
+  border-left: 4px solid var(--terracotta);
+}
+
+.learner-profile-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  color: var(--terracotta);
+}
+
+.learner-profile-heading h2,
+.learner-profile-heading p {
+  margin: 0;
+}
+
+.learner-profile-heading h2 {
+  color: var(--ink);
+}
+
+.learner-profile-heading p {
+  margin-top: 5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.learner-profile-form {
+  margin-top: 20px;
+}
+
+.learner-profile-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.learner-profile-form > div {
+  display: flex;
+  gap: 10px;
+}
+
+.learner-profile-form input {
+  min-width: 0;
+  min-height: 46px;
+  flex: 1;
+  padding: 10px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--paper-strong);
+  color: var(--ink);
+  font: inherit;
+}
+
+.learner-profile-form button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--terracotta);
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.learner-profile-form button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.profile-save-message {
+  margin: 12px 0 0;
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 750;
+}
+
 .sharing-heading {
   display: flex;
   align-items: flex-start;

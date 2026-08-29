@@ -12,6 +12,7 @@ export interface LessonCheckpoint {
 
 export interface Progress {
   version: 1;
+  learnerName: string;
   xp: number;
   todayXp: number;
   dailyGoalMinutes: DailyGoalMinutes;
@@ -33,4 +34,5 @@ export interface LoadedProgress {
   progress: Progress;
   recovery: RecoveryKind;
 }
+
 

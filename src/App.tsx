@@ -59,9 +59,10 @@ export default function App() {
       ) : app.view === 'records' ? (
         <LearningRecords progress={app.progress} />
       ) : (
-        <SettingsPage progress={app.progress} onGoalChange={app.changeGoal} onImport={app.importLearningProgress} onReset={app.resetLearningProgress} onRestore={app.restoreLearningProgress} />
+        <SettingsPage progress={app.progress} onNameChange={app.changeLearnerName} onGoalChange={app.changeGoal} onImport={app.importLearningProgress} onReset={app.resetLearningProgress} onRestore={app.restoreLearningProgress} />
       )}
       {!focusedMode ? <MobileNav current={section} onNavigate={app.navigate} /> : null}
     </div>
   );
 }
+

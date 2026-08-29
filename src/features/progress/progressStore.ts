@@ -7,6 +7,8 @@ export const PRIMARY_KEY = 'hola-progress-v1';
 export const BACKUP_KEY = 'hola-progress-backup-v1';
 
 const DEFAULT_GOAL: DailyGoalMinutes = 20;
+const DEFAULT_LEARNER_NAME = '学习者';
+const MAX_LEARNER_NAME_LENGTH = 20;
 const goalSet = new Set<number>(DAILY_GOALS);
 
 export class ProgressImportError extends Error {
@@ -25,6 +27,7 @@ function todayLocal(): string {
 export function createInitialProgress(date = todayLocal()): Progress {
   return {
     version: 1,
+    learnerName: DEFAULT_LEARNER_NAME,
     xp: 0,
     todayXp: 0,
     dailyGoalMinutes: DEFAULT_GOAL,
@@ -58,6 +61,12 @@ function validDate(input: unknown, fallback: string): string {
   return typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input) ? input : fallback;
 }
 
+function normalizedLearnerName(input: unknown, fallback: string): string {
+  if (typeof input !== 'string') return fallback;
+  const trimmed = input.trim();
+  return trimmed.length > 0 ? Array.from(trimmed).slice(0, MAX_LEARNER_NAME_LENGTH).join('') : fallback;
+}
+
 export function repairProgress(input: unknown, date = todayLocal()): Progress {
   const fallback = createInitialProgress(date);
   if (!isRecord(input)) return fallback;
@@ -77,6 +86,7 @@ export function repairProgress(input: unknown, date = todayLocal()): Progress {
 
   return {
     version: 1,
+    learnerName: normalizedLearnerName(input.learnerName, fallback.learnerName),
     xp: nonNegativeNumber(input.xp, fallback.xp),
     todayXp: nonNegativeNumber(input.todayXp, fallback.todayXp),
     dailyGoalMinutes: goalSet.has(Number(input.dailyGoalMinutes))
@@ -111,6 +121,7 @@ function isStrictProgress(input: unknown): input is Progress {
       && input.currentLesson.stepIndex === repaired.currentLesson.stepIndex
       && masteryMatches(input.currentLesson.mastery, repaired.currentLesson.mastery);
   return input.version === 1
+    && input.learnerName === repaired.learnerName
     && input.xp === repaired.xp
     && input.todayXp === repaired.todayXp
     && input.dailyGoalMinutes === repaired.dailyGoalMinutes
@@ -196,6 +207,12 @@ function isLegacyDemoProgress(input: unknown): boolean {
     && arraysMatch(input.completedTaskIds, ['review-vowels']);
 }
 
+function isLegacyUnnamedProgress(input: unknown): boolean {
+  return isRecord(input)
+    && !('learnerName' in input)
+    && isStrictProgress({ ...input, learnerName: DEFAULT_LEARNER_NAME });
+}
+
 export function loadProgress(storage: Storage, date = todayLocal()): LoadedProgress {
   const rawPrimary = storage.getItem(PRIMARY_KEY);
   const primary = parseStored(rawPrimary);
@@ -206,6 +223,12 @@ export function loadProgress(storage: Storage, date = todayLocal()): LoadedProgr
     const backup = parseStored(storage.getItem(BACKUP_KEY));
     if (isLegacyDemoProgress(backup)) storage.removeItem(BACKUP_KEY);
     return { progress: migrated, recovery: 'migrated' };
+  }
+
+  if (isLegacyUnnamedProgress(primary)) {
+    const migrated = repairProgress(primary, date);
+    storage.setItem(PRIMARY_KEY, JSON.stringify(migrated));
+    return { progress: resetDailyIfNeeded(migrated, date), recovery: 'primary' };
   }
 
   if (isStrictProgress(primary)) {
@@ -242,6 +265,11 @@ export function saveProgress(storage: Storage, progress: Progress): void {
 export function setDailyGoal(progress: Progress, minutes: DailyGoalMinutes): Progress {
   if (!goalSet.has(minutes)) return progress;
   return { ...progress, dailyGoalMinutes: minutes };
+}
+
+export function setLearnerName(progress: Progress, name: string): Progress {
+  const learnerName = normalizedLearnerName(name, progress.learnerName);
+  return learnerName === progress.learnerName ? progress : { ...progress, learnerName };
 }
 
 export function checkpointLesson(
@@ -315,3 +343,4 @@ export function importProgress(json: string): Progress {
   }
   return input;
 }
+

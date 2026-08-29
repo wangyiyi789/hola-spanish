@@ -35,9 +35,18 @@ describe('progressStore', () => {
   it('starts a new learner at zero without demo achievements', () => {
     const progress = createInitialProgress('2026-08-28');
 
-    expect(progress).toMatchObject({ xp: 0, todayXp: 0, todayMinutes: 0, streak: 0, lastStudyDate: null });
+    expect(progress).toMatchObject({ learnerName: '学习者', xp: 0, todayXp: 0, todayMinutes: 0, streak: 0, lastStudyDate: null });
     expect(progress.completedNodeIds).toEqual([]);
     expect(progress.completedTaskIds).toEqual([]);
+  });
+
+  it('normalizes a learner name while repairing imported progress', () => {
+    const repaired = repairProgress({
+      ...createInitialProgress('2026-08-28'),
+      learnerName: '  伊莲娜  ',
+    });
+
+    expect(repaired.learnerName).toBe('伊莲娜');
   });
 
   it('migrates the exact legacy demo record to a real zero starting point', () => {
@@ -159,3 +168,4 @@ describe('progressStore', () => {
     expect(importProgress(JSON.stringify(reversed))).toEqual(progress);
   });
 });
+
