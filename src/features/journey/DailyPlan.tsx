@@ -1,6 +1,7 @@
 import { ArrowRight, BookOpen, Check, Flame, MessageCircle, Pencil } from 'lucide-react';
 import type { Progress } from '../../domain/progress';
 import { GoalPicker } from './GoalPicker';
+import { DailyPhrase } from './DailyPhrase';
 
 interface DailyPlanProps {
   progress: Progress;
@@ -43,22 +44,25 @@ export function DailyPlan({ progress, onGoalChange, onContinue, compact = false 
 
   if (compact) {
     return (
-      <section className="mobile-goal-card" aria-labelledby="mobile-goal-title">
-        <div className="daily-progress-heading">
-          <h2 id="mobile-goal-title">每日目标</h2>
-          <strong>{progress.dailyGoalMinutes} 分钟</strong>
-        </div>
-        <div className="progress-track" aria-label={`今天已学习 ${progress.todayMinutes} 分钟`}>
-          <div className="progress-fill" style={{ width: `${ratio}%` }} />
-        </div>
-        <p className={overflow > 0 ? 'goal-overflow' : 'goal-remaining'}>
-          {overflow > 0 ? `已超出目标 ${overflow} 分钟` : `今天已学习 ${progress.todayMinutes} 分钟，还差 ${remaining} 分钟`}
-        </p>
-        <button className="continue-button" type="button" onClick={onContinue}>
-          {overflow > 0 || remaining === 0 ? '继续探索' : '继续学习'}
-          <ArrowRight aria-hidden="true" size={17} />
-        </button>
-      </section>
+      <>
+        <section className="mobile-goal-card" aria-labelledby="mobile-goal-title">
+          <div className="daily-progress-heading">
+            <h2 id="mobile-goal-title">每日目标</h2>
+            <strong>{progress.dailyGoalMinutes} 分钟</strong>
+          </div>
+          <div className="progress-track" aria-label={`今天已学习 ${progress.todayMinutes} 分钟`}>
+            <div className="progress-fill" style={{ width: `${ratio}%` }} />
+          </div>
+          <p className={overflow > 0 ? 'goal-overflow' : 'goal-remaining'}>
+            {overflow > 0 ? `已超出目标 ${overflow} 分钟` : `今天已学习 ${progress.todayMinutes} 分钟，还差 ${remaining} 分钟`}
+          </p>
+          <button className="continue-button" type="button" onClick={onContinue}>
+            {overflow > 0 || remaining === 0 ? '继续探索' : '继续学习'}
+            <ArrowRight aria-hidden="true" size={17} />
+          </button>
+        </section>
+        <DailyPhrase />
+      </>
     );
   }
 
@@ -123,14 +127,11 @@ export function DailyPlan({ progress, onGoalChange, onContinue, compact = false 
               })}
             </div>
           </section>
-          <section className="daily-phrase">
-            <small>一句西语</small>
-            <strong>La práctica hace al maestro.</strong>
-            <span>熟能生巧。</span>
-          </section>
+          <DailyPhrase />
         </div>
       </div>
     </aside>
   );
 }
+
 

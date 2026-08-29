@@ -54,9 +54,38 @@ test('keeps the complete learning route usable on a narrow phone viewport', asyn
   await page.reload();
 
   await expect(page.getByRole('heading', { name: /今天，让我们认识/ })).toBeVisible();
+  await expect(page.getByText('每日一句')).toBeVisible();
   await page.getByRole('button', { name: '练习' }).click();
   await expect(page.getByRole('heading', { name: '今日练习' })).toBeVisible();
   await page.getByRole('button', { name: '设置' }).click();
   await expect(page.getByRole('heading', { name: '学习与数据' })).toBeVisible();
+});
+
+test('refreshes and reads the daily phrase, then safely skips a spelling question', async ({ page }) => {
+  await expect(page.getByText('每日一句')).toBeVisible();
+  await expect(page.getByText('El niño come pan.')).toBeVisible();
+
+  await page.getByRole('button', { name: '换一句每日西语' }).click();
+  await expect(page.getByText('La mujer bebe café.')).toBeVisible();
+  const audioRequest = page.waitForRequest((request) => request.url().includes('/audio/la-mujer-bebe-cafe.mp3'));
+  await page.getByRole('button', { name: '朗读每日一句' }).click();
+  await audioRequest;
+  await expect(page.getByText('正在播放标准西语录音。')).toBeVisible();
+
+  await page.getByRole('button', { name: '开始 你好，Ñ' }).click();
+  await page.getByRole('button', { name: '继续学习' }).click();
+  await page.getByRole('button', { name: /选择 niño/ }).click();
+  await page.getByRole('button', { name: '检查答案' }).click();
+  await page.getByRole('button', { name: '继续' }).click();
+
+  await page.getByRole('button', { name: '跳过这道拼写题' }).click();
+  await expect(page.getByRole('heading', { name: '确定暂时跳过拼写吗？' })).toBeVisible();
+  await page.getByRole('button', { name: '确认跳过' }).click();
+  await expect(page.getByRole('heading', { name: '已跳过拼写' })).toBeVisible();
+  await expect(page.locator('.skipped-answer')).toContainText('正确写法：ñ');
+  await expect(page.getByText('+0 XP')).toBeVisible();
+  await page.getByRole('button', { name: '查看下一题' }).click();
+  await expect(page.getByText('选择正确的西语句子：这个男孩在吃面包。')).toBeVisible();
+  await expect(page.getByText('错题回炉')).not.toBeVisible();
 });
 

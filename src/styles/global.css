@@ -711,8 +711,67 @@ button:disabled {
 }
 
 .daily-phrase span {
+  display: block;
   font-size: 10px;
   opacity: 0.85;
+}
+
+.daily-phrase-heading,
+.daily-phrase-heading button,
+.daily-phrase-speech {
+  display: flex;
+  align-items: center;
+}
+
+.daily-phrase-heading {
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.daily-phrase-heading small {
+  margin: 0;
+}
+
+.daily-phrase-heading button,
+.daily-phrase-speech {
+  gap: 5px;
+  color: white;
+  border: 1px solid rgb(255 255 255 / 34%);
+  background: rgb(255 255 255 / 9%);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.daily-phrase-heading button {
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 99px;
+}
+
+.daily-phrase-speech {
+  min-height: 34px;
+  margin-top: 12px;
+  padding: 0 12px;
+  border-radius: 9px;
+}
+
+.daily-phrase-heading button:hover,
+.daily-phrase-speech:hover {
+  background: rgb(255 255 255 / 18%);
+}
+
+.daily-phrase-speech:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.daily-phrase-notice {
+  margin: 8px 0 0;
+  font-size: 9px;
+  line-height: 1.45;
+  opacity: 0.78;
 }
 
 .continue-button {
@@ -1614,6 +1673,16 @@ button:disabled {
     width: 130px;
   }
 
+  .skip-spelling-confirmation {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .skip-spelling-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
   .complete-rewards {
     flex-direction: column;
   }
@@ -1840,6 +1909,89 @@ button:disabled {
   margin-top: 18px;
   padding: 24px 28px;
   color: var(--terracotta);
+}
+
+.skip-spelling {
+  margin-top: 18px;
+}
+
+.skip-spelling-trigger {
+  display: block;
+  margin: 0 auto;
+  padding: 6px 10px;
+  color: var(--muted);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.skip-spelling-trigger strong {
+  margin-left: 4px;
+  color: var(--terracotta-dark);
+}
+
+.skip-spelling-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: var(--paper-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.skip-spelling-confirmation h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.skip-spelling-confirmation p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.skip-spelling-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.skip-spelling-actions button {
+  min-height: 38px;
+  padding: 0 12px;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.skip-spelling-actions .is-confirm {
+  color: white;
+  border-color: var(--terracotta);
+  background: var(--terracotta);
+}
+
+.skipped-answer {
+  margin: 22px 0 0;
+  padding: 17px 19px;
+  color: var(--terracotta-dark);
+  border: 1px solid var(--honey);
+  border-radius: 13px;
+  background: #fff2cf;
+  font-size: 14px;
+}
+
+.skipped-answer strong {
+  font-family: var(--font-display);
+  font-size: 25px;
 }
 
 .professional-drill-card {

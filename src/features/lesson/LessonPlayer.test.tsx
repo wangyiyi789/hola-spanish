@@ -181,5 +181,33 @@ describe('LessonPlayer', () => {
     await user.click(screen.getByRole('button', { name: '检查答案' }));
     expect(screen.getByRole('heading', { name: '¡Muy bien!' })).toBeVisible();
   });
+
+  it('lets learners skip a spelling question without adding it to the mistake queue', async () => {
+    const user = userEvent.setup();
+    const onCheckpoint = vi.fn();
+
+    render(
+      <LessonPlayer
+        lesson={lessons['alphabet-enye']}
+        resumeStep={2}
+        onExit={vi.fn()}
+        onCheckpoint={onCheckpoint}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: '跳过这道拼写题' }));
+    expect(screen.getByRole('heading', { name: '确定暂时跳过拼写吗？' })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: '确认跳过' }));
+    expect(screen.getByRole('heading', { name: '已跳过拼写' })).toBeVisible();
+    expect(screen.getByText((_text, element) => element?.classList.contains('skipped-answer') ?? false)).toHaveTextContent('正确写法：ñ');
+    expect(screen.getByText('+0 XP')).toBeVisible();
+    expect(onCheckpoint).toHaveBeenCalledWith(expect.not.objectContaining({ mistakeId: 'enye-fill' }));
+
+    await user.click(screen.getByRole('button', { name: '查看下一题' }));
+    expect(screen.getByText('选择正确的西语句子：这个男孩在吃面包。')).toBeVisible();
+    expect(screen.queryByText('错题回炉')).not.toBeInTheDocument();
+  });
 });
 

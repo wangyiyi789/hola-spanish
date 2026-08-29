@@ -37,6 +37,8 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
   const [input, setInput] = useState('');
   const [checked, setChecked] = useState(false);
   const [correct, setCorrect] = useState(false);
+  const [skipped, setSkipped] = useState(false);
+  const [skipConfirmation, setSkipConfirmation] = useState(false);
   const [complete, setComplete] = useState(false);
   const [speechNotice, setSpeechNotice] = useState('');
   const [mastery, setMastery] = useState(() => resumeMastery && resumedMasteryStep >= 0
@@ -53,6 +55,8 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
     setInput('');
     setChecked(false);
     setCorrect(false);
+    setSkipped(false);
+    setSkipConfirmation(false);
     setSpeechNotice('');
   };
 
@@ -89,6 +93,19 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
     });
   };
 
+  const skipSpelling = () => {
+    if (step.kind !== 'fill') return;
+    const checkpointMastery = answerMasteryQueue(mastery, true);
+    const checkpointIndex = checkpointMastery.current
+      ? lesson.steps.findIndex((item) => item.id === checkpointMastery.current)
+      : stepIndex;
+    setCorrect(true);
+    setSkipped(true);
+    setChecked(true);
+    setSkipConfirmation(false);
+    onCheckpoint({ lessonId: lesson.id, stepIndex: checkpointIndex, mastery: checkpointMastery });
+  };
+
   const exit = () => {
     const checkpointMastery = checked ? answerMasteryQueue(mastery, correct) : mastery;
     const checkpointIndex = checkpointMastery.current
@@ -120,6 +137,8 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
   const nextMastery = checked ? answerMasteryQueue(mastery, correct) : mastery;
   const feedbackActionLabel = !correct
     ? '重新作答'
+    : skipped
+    ? '查看下一题'
     : mastery.phase === 'review'
     ? correct && nextMastery.phase === 'complete'
       ? '掌握了，完成课程'
@@ -142,6 +161,7 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
           <AnswerFeedback
             actionLabel={feedbackActionLabel}
             correct={correct}
+            skipped={skipped}
             step={step}
             xp={Math.max(5, Math.round(lesson.xp / lesson.steps.length))}
             onContinue={advance}
@@ -164,6 +184,26 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
               onSpeak={(text) => void speak(text)}
             />
             {speechNotice ? <p className="speech-notice" role="status">{speechNotice}</p> : null}
+            {step.kind === 'fill' ? (
+              <div className="skip-spelling">
+                {skipConfirmation ? (
+                  <div className="skip-spelling-confirmation" role="alertdialog" aria-labelledby="skip-spelling-title">
+                    <div>
+                      <h2 id="skip-spelling-title">确定暂时跳过拼写吗？</h2>
+                      <p>本题不会记为错题，我们会先告诉你正确写法。</p>
+                    </div>
+                    <div className="skip-spelling-actions">
+                      <button type="button" onClick={() => setSkipConfirmation(false)}>继续拼写</button>
+                      <button className="is-confirm" type="button" onClick={skipSpelling}>确认跳过</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button aria-label="跳过这道拼写题" className="skip-spelling-trigger" type="button" onClick={() => setSkipConfirmation(true)}>
+                    暂时不想拼写？<strong>跳过本题</strong>
+                  </button>
+                )}
+              </div>
+            ) : null}
             {step.kind === 'explain' ? (
               <button className="lesson-primary" type="button" onClick={advance}>
                 继续学习 <ArrowRight aria-hidden="true" size={18} />
@@ -177,3 +217,4 @@ export function LessonPlayer({ lesson, resumeStep, resumeMastery, onExit, onChec
     </main>
   );
 }
+
