@@ -20,7 +20,8 @@ test('sets a longer goal, completes a lesson, persists progress and collects wor
   await page.getByRole('button', { name: /选择 niño/ }).click();
   await page.getByRole('button', { name: '检查答案' }).click();
   await page.getByRole('button', { name: '继续' }).click();
-  await page.getByRole('textbox', { name: '填写缺少的西语单词' }).fill('ñ');
+  await page.getByRole('button', { name: '输入特殊字符 ñ' }).click();
+  await expect(page.getByRole('textbox', { name: '填写缺少的西语单词' })).toHaveValue('ñ');
   await page.getByRole('button', { name: '检查答案' }).click();
   await page.getByRole('button', { name: '继续' }).click();
   await page.getByRole('button', { name: /选择 El niño come pan/ }).click();
@@ -58,3 +59,4 @@ test('keeps the complete learning route usable on a narrow phone viewport', asyn
   await page.getByRole('button', { name: '设置' }).click();
   await expect(page.getByRole('heading', { name: '学习与数据' })).toBeVisible();
 });
+

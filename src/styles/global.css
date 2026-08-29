@@ -2148,6 +2148,52 @@ button:disabled {
   text-align: center;
 }
 
+.spanish-character-helper {
+  margin-top: 18px;
+}
+
+.spanish-character-helper > span {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.spanish-character-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spanish-character-keys button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--terracotta-dark);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--paper-strong);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--terracotta) 24%, transparent);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.spanish-character-keys button:hover,
+.spanish-character-keys button:focus-visible {
+  color: var(--paper-strong);
+  border-color: var(--terracotta);
+  outline: none;
+  background: var(--terracotta);
+}
+
+.spanish-character-keys button:active {
+  box-shadow: none;
+  transform: translateY(2px);
+}
+
 .drill-complete h1 { margin: 10px 0; font-family: var(--font-display); font-size: 50px; }
 .drill-complete > p { color: var(--muted); }
 
@@ -2565,3 +2611,4 @@ button:disabled {
     animation-iteration-count: 1 !important;
   }
 }
+

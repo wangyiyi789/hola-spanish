@@ -160,4 +160,26 @@ describe('LessonPlayer', () => {
     await user.click(screen.getByRole('button', { name: '继续' }));
     expect(screen.getByText('补全“明天”这个单词')).toBeVisible();
   });
+
+  it('lets learners enter Spanish characters without changing their physical keyboard', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <LessonPlayer
+        lesson={lessons['alphabet-enye']}
+        resumeStep={2}
+        onExit={vi.fn()}
+        onCheckpoint={vi.fn()}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: '填写缺少的西语单词' });
+    await user.click(screen.getByRole('button', { name: '输入特殊字符 ñ' }));
+
+    expect(input).toHaveValue('ñ');
+    await user.click(screen.getByRole('button', { name: '检查答案' }));
+    expect(screen.getByRole('heading', { name: '¡Muy bien!' })).toBeVisible();
+  });
 });
+

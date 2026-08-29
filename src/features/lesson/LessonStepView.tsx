@@ -12,6 +12,7 @@ interface LessonStepViewProps {
 }
 
 const containsSpanishText = (text: string) => /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(text);
+const spanishCharacters = ['ñ', 'á', 'é', 'í', 'ó', 'ú', 'ü', '¿', '¡'] as const;
 
 export function LessonStepView({
   step,
@@ -52,6 +53,22 @@ export function LessonStepView({
             <input autoComplete="off" value={input} onChange={(event) => onInput(event.target.value)} />
           </label>
           <span>{step.after}</span>
+        </div>
+        <div className="spanish-character-helper">
+          <span>西语键盘 · 点按即可输入</span>
+          <div aria-label="西语特殊字符" className="spanish-character-keys" role="group">
+            {spanishCharacters.map((character) => (
+              <button
+                aria-label={`输入特殊字符 ${character}`}
+                key={character}
+                lang="es"
+                type="button"
+                onClick={() => onInput(`${input}${character}`)}
+              >
+                {character}
+              </button>
+            ))}
+          </div>
         </div>
         {step.speech ? (
           <button className="speech-button" type="button" onClick={() => onSpeak(step.speech ?? '')}>
@@ -97,4 +114,5 @@ export function LessonStepView({
     </section>
   );
 }
+
 
